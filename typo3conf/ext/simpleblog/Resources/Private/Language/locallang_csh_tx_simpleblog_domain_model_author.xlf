@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:simpleblog/Resources/Private/Language/locallang_csh_tx_simpleblog_domain_model_author.xlf" date="2022-07-20T13:18:12Z" product-name="simpleblog">
+		<header/>
+		<body>
+			<trans-unit id="fullname.description" resname="fullname.description">
+				<source>Author&#039;s full nane</source>
+			</trans-unit>
+			<trans-unit id="email.description" resname="email.description">
+				<source>Email address</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

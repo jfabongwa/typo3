@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:simpleblog/Resources/Private/Language/locallang_csh_tx_simpleblog_domain_model_tag.xlf" date="2022-07-20T13:18:12Z" product-name="simpleblog">
+		<header/>
+		<body>
+			<trans-unit id="tag_value.description" resname="tag_value.description">
+				<source>Tag</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,14 @@
+{
+  "name": "typo3-extbase-book/site-package",
+  "description": "TYPO3 v9 Site Package (frontend theme)",
+  "type": "typo3-cms-extension",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Michael Schams"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "^9.5"
+  }
+}

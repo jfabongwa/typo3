@@ -1,0 +1,72 @@
+# Docker image for TYPO3 CMS
+# Copyright (C) 2016-2020  Martin Helmich <martin@helmich.me>
+#                          and contributors <https://github.com/martin-helmich/docker-typo3/graphs/contributors>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+version: "3"
+services:
+  typo3:
+    build: .
+    container_name: extbasebook_typo3
+    depends_on:
+      - database
+    links:
+      - 'database:database'
+    networks:
+      - backend
+
+    ports:
+      - "80:80"
+    volumes:
+      - ./fileadmin:/var/www/html/fileadmin
+      - ./typo3conf:/var/www/html/typo3conf
+      - ./typo3temp:/var/www/html/typo3temp
+      - ./uploads:/var/www/html/uploads
+    environment:
+      - TYPO3_CONTEXT=Development
+  database:
+    image: mariadb:latest
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--general-log=1', '--general_log_file=/var/log/mysql/mysql.log']
+    container_name: extbasebook_db
+    environment:
+     MYSQL_USER: "extbasebook"
+     MYSQL_PASSWORD: "!extbasebook"
+     MYSQL_DATABASE: "extbasebook"
+     MYSQL_ROOT_PASSWORD: "!hariana_68"
+    networks:
+      - backend
+    volumes:
+      - ./dbdata:/var/lib/mysql
+  phpmyadmin:
+    container_name: extbasebook_phpmyadmin
+    depends_on:
+     - database
+    environment:
+       PMA_HOST: database
+       MYSQL_ROOT_PASSWORD: "!hariana_68"
+    image: phpmyadmin/phpmyadmin
+    networks:
+     - backend
+    ports:
+     - 15000:80
+    restart: always
+volumes:
+  fileadmin:
+  typo3conf:
+  typo3temp:
+  uploads:
+  dbdata:
+networks:
+  backend:
