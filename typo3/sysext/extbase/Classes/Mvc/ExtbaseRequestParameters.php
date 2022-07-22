@@ -294,6 +294,7 @@ class ExtbaseRequestParameters
     public function getControllerActionName(): string
     {
         $controllerObjectName = $this->getControllerObjectName();
+        var_dump($controllerObjectName); die();
         if ($controllerObjectName !== '' && $this->controllerActionName === strtolower($this->controllerActionName)) {
             // todo: this is nonsense! We can detect a non existing method in
             // todo: \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin, if necessary.

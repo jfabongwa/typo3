@@ -1,36 +1,70 @@
 <?php
-defined('TYPO3') || die();
+/**
+ * Extension local configuration
+ *
+ * @package EXT:simpleblog
+ * @author Michael Schams <michael@example.com>
+ * @link https://www.extbase-book.org
+ */
 
-(static function() {
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'ExtbaseBook.Simpleblog',
-        'Bloglisting',
-        [
-            \ExtbaseBook\Simpleblog\Controller\BlogController::class => 'list'
-        ],
-        // non-cacheable actions
-        [
-            \ExtbaseBook\Simpleblog\Controller\BlogController::class => 'list'
-        ]
-    );
+defined('TYPO3_MODE') || die('Access denied.');
 
-    // wizards
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        'mod {
+call_user_func(
+    function () {
+      //die('I am actually hier');
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Simpleblog',
+            'Bloglisting',
+            [
+                \ExtbaseBook\Simpleblog\Controller\BlogController::class => 'list'
+                // 'Blog' => 'list, addForm, add, show, updateForm, update, deleteConfirm, delete',
+                // 'Post' => 'addForm, add, show, updateForm, update, deleteConfirm, delete',
+                // 'Ajax' => 'comment'
+            ],
+            // non-cacheable actions
+            [
+              \ExtbaseBook\Simpleblog\Controller\BlogController::class => 'list',  
+              // 'Blog' => 'list, addForm, add, show, updateForm, update, deleteConfirm, delete',
+              // 'Post' => 'addForm, add, show, updateForm, update, deleteConfirm, delete',
+              // 'Ajax' => 'comment'
+            ]
+        );
+
+        // Add PageTSConfig (chapter 6)
+        $languageFile = 'simpleblog/Resources/Private/Language/locallang_db.xlf';
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+            'mod {
             wizards.newContentElement.wizardItems.plugins {
-                elements {
-                    bloglisting {
-                        iconIdentifier = simpleblog-plugin-bloglisting
-                        title = LLL:EXT:simpleblog/Resources/Private/Language/locallang_db.xlf:tx_simpleblog_bloglisting.name
-                        description = LLL:EXT:simpleblog/Resources/Private/Language/locallang_db.xlf:tx_simpleblog_bloglisting.description
-                        tt_content_defValues {
-                            CType = list
-                            list_type = simpleblog_bloglisting
-                        }
-                    }
+              elements {
+                bloglisting {
+                  iconIdentifier = simpleblog-plugin-bloglisting
+                  title = LLL:EXT:' . $languageFile. ':tx_simpleblog_bloglisting.name
+                  description = LLL:EXT:' . $languageFile. ':tx_simpleblog_bloglisting.description
+                  tt_content_defValues {
+                    CType = list
+                    list_type = simpleblog_bloglisting
+                  }
                 }
-                show = *
+              }
+              show = *
             }
-       }'
-    );
-})();
+          }'
+        );
+
+        // Register extension icon (chapter 6)
+        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Imaging\IconRegistry::class
+        );
+
+        $iconRegistry->registerIcon(
+            'simpleblog-plugin-bloglisting',
+            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+            ['source' => 'EXT:simpleblog/Resources/Public/Icons/list.png']
+        );
+
+        // Register TypeConverter (chapter 15)
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(
+            \ExtbaseBook\Simpleblog\Property\TypeConverter\UploadedFileReferenceConverter::class
+        );
+    }
+);

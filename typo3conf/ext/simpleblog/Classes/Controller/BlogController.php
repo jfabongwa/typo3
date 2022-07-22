@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace ExtbaseBook\Simpleblog\Controller;
 
-use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+//use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use ExtbaseBook\Simpleblog\Domain\Model\Blog;
 
 
 /**
@@ -19,7 +20,7 @@ use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 /**
  * BlogController
  */
-class BlogController extends ActionController
+class BlogController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
@@ -32,9 +33,10 @@ class BlogController extends ActionController
     /**
      * @param \Extbasebook\Simpleblog\Domain\Repository\BlogRepository $blogRepository
      */
-    public function injectBlogRepository(\Extbasebook\Simpleblog\Domain\Repository\BlogRepository $blogRepository)
+    public function __construct(\ExtbaseBook\Simpleblog\Domain\Repository\BlogRepository $blogRepository)
     {
-        $this->blogRepository = $blogRepository;
+      $this->blogRepository = $blogRepository;
+      
     }
 
     /**
@@ -42,10 +44,15 @@ class BlogController extends ActionController
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function listAction(): \Psr\Http\Message\ResponseInterface
-    {
-        $blogs = $this->blogRepository->findAll();
+    public function listAction(Blog $blog): void {
+      $blogs = [];
+      for ($i = 1; $i <= 3; $i++) {
+          /** @var \ExtbaseBook\Simpleblog\Domain\Model\Blog $blog */
+          $blog->setTitle('This is the ' . $i . '. Blog!');
+          $blogs[] = $blog;
+      }
         $this->view->assign('blogs', $blogs);
-        return $this->htmlResponse();
-    }
+        $this->responseFactory->createHtmlResponce($this->view->render());
+      }
+      
 }
